@@ -1,9 +1,11 @@
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Layout } from "antd";
 import Header from "./components/Header";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import ReclamosPorEdificio from "./pages/Reclamos/ReclamosPorEdificio"; // Importar el componente ReclamosPorEdificio
 import "./App.css";
 import ReclamosList from "./pages/Reclamos/ReclamosList";
 
@@ -22,7 +24,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/reclamos" element={<ReclamosList />}/>
+              <Route path="/reclamos" element={<ReclamosList />} />
+              <Route path="/edificios/:codigoEdificio/reclamos" element={<ReclamosPorEdificio />} />
             </Routes>
           </Content>
         </Layout>

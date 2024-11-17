@@ -1,7 +1,15 @@
+// src/components/EdificioCard.jsx
 import React from "react";
-import { Row, Col, Button } from "antd";
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 
-function EdificioCard({ nombre, imagenURL, direccion }) {
+function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
+  const navigate = useNavigate();
+
+  const handleVerReclamos = () => {
+    navigate(`/edificios/${codigoEdificio}/reclamos`);
+  };
+
   return (
     <div
       style={{
@@ -34,8 +42,8 @@ function EdificioCard({ nombre, imagenURL, direccion }) {
       </div>
 
       {/* Botón de acción */}
-      <Button type="primary" style={{ borderRadius: "5px" }}>
-        Ver más
+      <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerReclamos}>
+        Ver reclamos
       </Button>
     </div>
   );

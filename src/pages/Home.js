@@ -28,6 +28,7 @@ function Home() {
           nombre={edificio.nombre}
           imagenURL="https://i.pinimg.com/736x/a7/29/84/a72984424702de993c3592e00b910ff9.jpg"
           direccion={edificio.direccion}
+          codigoEdificio={edificio.codigo}  
         />
       ))}
     </div>
