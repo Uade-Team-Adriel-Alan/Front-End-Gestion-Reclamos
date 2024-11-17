@@ -68,7 +68,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
       dataIndex: 'estadoReclamo',
       key: 'estadoReclamo',
       render: (estado) => (
-        <Tag color={estado === 'PENDIENTE' ? 'orange' : estado === 'EN PROCESO' ? 'blue' : estado === 'RESUELTO' ? 'green' : 'red'}>
+        <Tag color={estado === 'Pendiente' ? 'orange' : estado === 'En proceso' ? 'blue' : estado === 'Resuelto' ? 'green' : 'red'}>
           {estado}
         </Tag>
       ),
