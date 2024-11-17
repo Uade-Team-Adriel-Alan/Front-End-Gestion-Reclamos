@@ -1,0 +1,15 @@
+.fondo {
+    background-color: #be95c4;
+  }
+  
+/* Estilo para el sidebar */
+.nav-link {
+  font-size: 1.2rem;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.nav-link:hover {
+  background-color: #f8f9fa; /* Color de fondo al pasar el mouse */
+  text-decoration: none; /* Quita subrayado */
+}
