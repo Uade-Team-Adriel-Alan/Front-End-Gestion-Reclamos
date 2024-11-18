@@ -71,7 +71,9 @@ export const getUnidadesPorEdificio = async (codigo) => {
 // Crear edificio
 export const crearEdificio = async (direccion, nombre) => {
     try {
-        const response = await axios.post(`${API_URL}/crear`, { direccion, nombre });
+        const response = await axios.post(`${API_URL}/crear`, null, {
+            params: { direccion, nombre },
+        });
         return response.data;
     } catch (error) {
         console.error('Error al crear el edificio:', error);
