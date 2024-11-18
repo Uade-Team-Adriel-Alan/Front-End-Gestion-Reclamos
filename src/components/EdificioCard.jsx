@@ -10,6 +10,10 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
     navigate(`/edificios/${codigoEdificio}/reclamos`);
   };
 
+  const handleVerUnidades = () => {
+    navigate(`/edificios/${codigoEdificio}/unidades`);
+  };
+
   return (
     <div
       style={{
@@ -44,6 +48,10 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
       {/* Botón de acción */}
       <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerReclamos}>
         Ver reclamos
+      </Button>
+
+      <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerUnidades}>
+        Ver Unidades
       </Button>
     </div>
   );

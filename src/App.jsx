@@ -6,6 +6,8 @@ import Header from "./components/Header";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import ReclamosPorEdificio from "./pages/Reclamos/ReclamosPorEdificio"; // Importar el componente ReclamosPorEdificio
+import UnidadesPorEdificio from "./pages/Unidades/UniadesPorEdificio";
+import UnidadEspecifico from "./pages/Unidades/UnidadEspesifico";
 import "./App.css";
 import ReclamosList from "./pages/Reclamos/ReclamosList";
 
@@ -26,6 +28,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/reclamos" element={<ReclamosList />} />
               <Route path="/edificios/:codigoEdificio/reclamos" element={<ReclamosPorEdificio />} />
+              <Route path="/edificios/:codigoEdificio/unidades" element={<UnidadesPorEdificio />} />
+              <Route path="/unidades/:codigoEdificio/:piso/:numero/detalles" element={<UnidadEspecifico />} />
             </Routes>
           </Content>
         </Layout>

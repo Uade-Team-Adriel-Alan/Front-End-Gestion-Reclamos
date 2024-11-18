@@ -23,6 +23,9 @@ const ReclamosList = () => {
     fetchData();
   }, []);
 
+  if (loading) return <p>Cargando reclamos del edificio...</p>;
+  if (error) return <p>{error}</p>;
+
   return <ReclamoContent data={data} />;
 };
 
