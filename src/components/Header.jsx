@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { HomeOutlined, LoginOutlined } from "@ant-design/icons";
+import { HomeOutlined, LoginOutlined, UserOutlined, ProfileOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
@@ -38,11 +38,14 @@ export default function Header() {
         <Menu.Item key="2" icon={<LoginOutlined />}>
           <Link to="/login">Login</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<LoginOutlined />}>
+        <Menu.Item key="3" icon={<LoginOutlined />}>
           <Link to="/login">Mis reclamos</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<LoginOutlined />}>
+        <Menu.Item key="4" icon={<ProfileOutlined />}>
           <Link to="/reclamos">Gestionar Reclamos</Link>
+        </Menu.Item>
+        <Menu.Item key="5" icon={<UserOutlined />}>
+          <Link to="/personas">Gestionar Personas</Link>
         </Menu.Item>
         
       </Menu>
