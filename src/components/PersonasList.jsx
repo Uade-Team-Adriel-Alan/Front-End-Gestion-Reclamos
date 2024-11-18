@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 import { List, Button, Input, Pagination } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
-const PersonasList = ({ personas, onVerMasDetalles, listStyle, buttonStyle }) => {
+const PersonasList = ({ personas, listStyle, buttonStyle }) => {
   const [searchText, setSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+
+  const navigate = useNavigate();
 
   // Filtrar personas según el texto de búsqueda
   const filteredPersonas = personas.filter(persona =>
     persona.nombre.toLowerCase().includes(searchText.toLowerCase()) ||
     persona.documento.includes(searchText)
   );
-
-  // Calcular el número total de páginas
-  const totalPages = Math.ceil(filteredPersonas.length / pageSize);
-
-  // Manejar el cambio de página
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
 
   // Calcular las personas a mostrar en la página actual
   const startIndex = (currentPage - 1) * pageSize;
@@ -43,9 +38,9 @@ const PersonasList = ({ personas, onVerMasDetalles, listStyle, buttonStyle }) =>
               <Button
                 type="primary"
                 style={buttonStyle}
-                onClick={() => onVerMasDetalles(persona)}
+                onClick={() => navigate(`/personas/${persona.documento}`)}
               >
-                Ver más detalles
+                Ver detalles
               </Button>
             ]}
           >
@@ -60,7 +55,7 @@ const PersonasList = ({ personas, onVerMasDetalles, listStyle, buttonStyle }) =>
         current={currentPage}
         pageSize={pageSize}
         total={filteredPersonas.length}
-        onChange={handlePageChange}
+        onChange={setCurrentPage}
         showSizeChanger={false}
         style={{ marginTop: '16px', textAlign: 'center' }}
       />
@@ -69,7 +64,6 @@ const PersonasList = ({ personas, onVerMasDetalles, listStyle, buttonStyle }) =>
 };
 
 PersonasList.defaultProps = {
-  onVerMasDetalles: (persona) => console.log(`Ver más detalles de ${persona.nombre}`),
   listStyle: {},
   buttonStyle: {},
 };

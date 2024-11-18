@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PersonaService from '../services/PersonaSerivce';
 import { Card, Typography, List } from 'antd';
-import UnidadCard from '../components/UnidadesCard'; // Asegúrate de que la ruta sea correcta
-import ReclamoTable from '../components/ReclamosTable'; // Asegúrate de que la ruta sea correcta
+import UnidadesCard from '../components/UnidadesCard';
+import ReclamoContent from '../pages/ReclamoContent';
 
 const { Title, Text } = Typography;
 
-const PerssonaEspecificoComponent = () => {
+const PersonaEspecificoComponent = () => {
   const { documento } = useParams();
   const [persona, setPersona] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,41 +36,49 @@ const PerssonaEspecificoComponent = () => {
       <Card>
         <Title level={2}>{persona.nombre}</Title>
         <Text>Documento: {persona.documento}</Text>
-        <Title level={4}>Reclamos</Title>
-        <ReclamoTable reclamos={persona.reclamos} />
+        <ReclamoContent data={persona.reclamos} />
+        
         <Title level={4}>Unidades que posee</Title>
-        <List
-          itemLayout="horizontal"
-          dataSource={persona.duenioDe}
-          renderItem={unidad => (
-            <List.Item>
-              <UnidadCard unidad={unidad} />
-            </List.Item>
-          )}
-        />
-        <Title level={4}>Inquilinos</Title>
-        <List
-          itemLayout="horizontal"
-          dataSource={persona.inquilinoEn}
-          renderItem={unidad => (
-            <List.Item>
-              <UnidadCard unidad={unidad} />
-            </List.Item>
-          )}
-        />
-        <Title level={4}>Habitaciones</Title>
-        <List
-          itemLayout="horizontal"
-          dataSource={persona.habitaEn}
-          renderItem={unidad => (
-            <List.Item>
-              <UnidadCard unidad={unidad} />
-            </List.Item>
-          )}
-        />
+        {persona.duenioDe.length > 0 ? (
+          persona.duenioDe.map((unidad) => (
+            <UnidadesCard
+              key={unidad.identificador}
+              unidad={unidad}
+              codigoEdificio={unidad.codigoEdificio}
+            />
+          ))
+        ) : (
+          <p style={{ textAlign: "center" }}>No hay unidades disponibles.</p>
+        )}
+
+        <Title level={4}>Inquilinos En:</Title>
+        {persona.inquilinoEn.length > 0 ? (
+          persona.inquilinoEn.map((unidad) => (
+            <UnidadesCard
+              key={unidad.identificador}
+              unidad={unidad}
+              codigoEdificio={unidad.codigoEdificio}
+            />
+          ))
+        ) : (
+          <p style={{ textAlign: "center" }}>No hay inquilinos en esta persona.</p>
+        )}
+
+        <Title level={4}>Habitante En:</Title>
+        {persona.habitaEn.length > 0 ? (
+          persona.habitaEn.map((unidad) => (
+            <UnidadesCard
+              key={unidad.identificador}
+              unidad={unidad}
+              codigoEdificio={unidad.codigoEdificio}
+            />
+          ))
+        ) : (
+          <p style={{ textAlign: "center" }}>No hay habitaciones disponibles.</p>
+        )}
       </Card>
     </div>
   );
 };
 
-export default PerssonaEspecificoComponent; 
+export default PersonaEspecificoComponent; 

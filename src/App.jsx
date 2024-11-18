@@ -12,6 +12,8 @@ import ReclamosList from "./pages/Reclamos/ReclamosList";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
+import PersonaList from "./pages/Personas/PersonasList";
+import PersonaEspecifico from "./pages/Personas/PersonaEspesifico";
 
 const { Content } = Layout;
 
@@ -62,6 +64,22 @@ function App() {
                   element={
                     <PrivateRoute>
                       <UnidadEspecifico />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/personas"
+                  element={
+                    <PrivateRoute>
+                      <PersonaList />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/personas/:documento"
+                  element={
+                    <PrivateRoute>
+                      <PersonaEspecifico />
                     </PrivateRoute>
                   }
                 />

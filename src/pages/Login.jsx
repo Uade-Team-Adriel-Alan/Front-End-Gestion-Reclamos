@@ -25,7 +25,7 @@ function Login() {
       if (userData.rol === "admin") {
         navigate("/");
       } else {
-        navigate("/reclamos");
+        navigate("/personas/" + userData.documento);
       }
     } catch (error) {
       setErrorMessage(error.message || "Error al iniciar sesión");
