@@ -2,9 +2,8 @@ import React from "react";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
-function UnidadesCard({ unidad }) {
+function UnidadesCard({ unidad, codigoEdificio}) {
   const navigate = useNavigate();
-
   // Verificar que los datos de la unidad estén completos
   if (!unidad || !unidad.identificador || !unidad.piso || !unidad.numero) {
     console.error('Datos de unidad incompletos:', unidad);
@@ -12,11 +11,7 @@ function UnidadesCard({ unidad }) {
   }
 
   const handleVerDetalles = () => {
-    navigate(`/unidades/${unidad.identificador}/${unidad.piso}/${unidad.numero}/detalles`);
-  };
-
-  const handleAdministrarHabitantes = () => {
-    navigate(`/unidades/${unidad.identificador}/${unidad.piso}/${unidad.numero}/habitantes`);
+    navigate(`/unidades/${codigoEdificio}/${unidad.piso}/${unidad.numero}/detalles`);
   };
 
   return (
@@ -44,14 +39,6 @@ function UnidadesCard({ unidad }) {
         onClick={handleVerDetalles}
       >
         Ver detalles
-      </Button>
-
-      <Button
-        type="primary"
-        style={{ borderRadius: "5px" }}
-        onClick={handleAdministrarHabitantes}
-      >
-        Administrar habitantes
       </Button>
     </div>
   );

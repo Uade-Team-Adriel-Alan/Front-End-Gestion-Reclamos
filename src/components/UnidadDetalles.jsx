@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Card, Typography, Divider } from 'antd';
 import ReclamoContent from '../pages/ReclamoContent';
 import UnidadService from '../services/UnidadService';
@@ -9,76 +9,82 @@ const UnidadDetalles = ({ unidad }) => {
   const [documento, setDocumento] = useState('');
   const [unidadData, setUnidadData] = useState(unidad);
 
-  const handleAgregarDuenio = async () => {
+  // Función para actualizar los datos de la unidad
+  const actualizarDatosUnidad = async () => {
     try {
-      await UnidadService.agregarDuenioUnidad(unidadData.identificador, unidadData.piso, unidadData.numero, documento);
-      message.success('Dueño agregado exitosamente');
+      const duenios = await UnidadService.obtenerDueniosPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
+      const inquilinos = await UnidadService.obtenerInquilinosPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
+      const habitantes = await UnidadService.obtenerHabitantesPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
       setUnidadData((prevData) => ({
         ...prevData,
-        duenios: [...prevData.duenios, { documento, nombre: 'Nuevo Dueño' }]
+        duenios,
+        inquilinos,
+        habitantes,
       }));
     } catch (error) {
-      message.error('Error al agregar dueño');
+      message.error('Error al actualizar los datos de la unidad');
+      console.error(error);
+    }
+  };
+
+  const handleAgregarDuenio = async () => {
+    try {
+      await UnidadService.agregarDuenioUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero, documento);
+      message.success('Dueño agregado exitosamente');
+      actualizarDatosUnidad(); // Actualizar datos después de agregar
+    } catch (error) {
+      message.error(error.response.data);
       console.error(error);
     }
   };
 
   const handleTransferirUnidad = async () => {
     try {
-      await UnidadService.transferirUnidad(unidadData.identificador, unidadData.piso, unidadData.numero, documento);
+      await UnidadService.transferirUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero, documento);
       message.success('Unidad transferida exitosamente');
-      setUnidadData((prevData) => ({
-        ...prevData,
-        duenios: [{ documento, nombre: 'Nuevo Dueño' }]
-      }));
+      actualizarDatosUnidad(); // Actualizar datos después de transferir
     } catch (error) {
-      message.error('Error al transferir unidad');
+      message.error(error.response.data);
       console.error(error);
     }
   };
 
   const handleAgregarInquilino = async () => {
     try {
-      await UnidadService.agregarInquilinoUnidad(unidadData.identificador, unidadData.piso, unidadData.numero, documento);
+      await UnidadService.agregarInquilinoUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero, documento);
       message.success('Inquilino agregado exitosamente');
-      setUnidadData((prevData) => ({
-        ...prevData,
-        inquilinos: [...prevData.inquilinos, { documento, nombre: 'Nuevo Inquilino' }]
-      }));
+      actualizarDatosUnidad(); // Actualizar datos después de agregar
     } catch (error) {
-      message.error('Error al agregar inquilino');
+      message.error(error.response.data);
       console.error(error);
     }
   };
 
   const handleAgregarHabitante = async () => {
     try {
-      await UnidadService.agregarHabitanteUnidad(unidadData.identificador, unidadData.piso, unidadData.numero, documento);
+      await UnidadService.agregarHabitanteUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero, documento);
       message.success('Habitante agregado exitosamente');
-      setUnidadData((prevData) => ({
-        ...prevData,
-        habitantes: [...prevData.habitantes, { documento, nombre: 'Nuevo Habitante' }]
-      }));
+      actualizarDatosUnidad(); // Actualizar datos después de agregar
     } catch (error) {
-      message.error('Error al agregar habitante');
+      message.error(error.response.data);
       console.error(error);
     }
   };
 
   const handleLiberarUnidad = async () => {
     try {
-      await UnidadService.liberarUnidad(unidadData.identificador, unidadData.piso, unidadData.numero);
+      await UnidadService.liberarUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
       message.success('Unidad liberada exitosamente');
-      setUnidadData((prevData) => ({
-        ...prevData,
-        inquilinos: [],
-        habitantes: []
-      }));
+      actualizarDatosUnidad(); // Actualizar datos después de liberar
     } catch (error) {
-      message.error('Error al liberar unidad');
+      message.error(error.response.data);
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    actualizarDatosUnidad(); // Actualizar datos al montar el componente
+  }, []);
 
   if (!unidadData) {
     return <p>No se encontraron detalles de la unidad.</p>;
@@ -115,7 +121,6 @@ const UnidadDetalles = ({ unidad }) => {
         ))}
 
         <Divider />
-        <Title level={4}>Reclamos</Title>
         <ReclamoContent data={unidadData.reclamos} />
 
         <Divider />
