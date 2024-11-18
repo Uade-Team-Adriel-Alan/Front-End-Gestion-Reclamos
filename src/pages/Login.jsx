@@ -1,63 +1,61 @@
-import React, { useState } from 'react';
-import { log, token } from '../services/AuthService';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { log, token } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    setErrorMessage('');
-
+    setErrorMessage("");
+  
     try {
-      // Obtiene el idToken de Firebase
       const idToken = await log.login(email, password);
-      
-      // Llama al endpoint de backend para obtener datos del usuario
       const userData = await token.login(idToken);
-      console.log('Usuario autenticado:', userData);
-
-      // Redirección basada en el rol
-      if (userData.rol == 'admin') {
-        navigate('/'); // Página principal
+      login({ ...userData, token: idToken });  // Guarda el usuario en el contexto
+  
+      // Guarda los datos en el localStorage
+      localStorage.setItem("auth", JSON.stringify({ ...userData, token: idToken }));
+  
+      if (userData.rol === "admin") {
+        navigate("/");
       } else {
-        navigate('/Reclamos'); // Página de reclamos
+        navigate("/reclamos");
       }
     } catch (error) {
-      setErrorMessage(error.error?.message || 'Error al iniciar sesión');
+      setErrorMessage(error.message || "Error al iniciar sesión");
     }
   };
+  
 
   return (
     <div>
       <form onSubmit={handleLogin}>
         <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label">
+          <label htmlFor="email" className="form-label">
             Correo electrónico
           </label>
           <input
             type="email"
             className="form-control"
-            id="exampleInputEmail1"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            aria-describedby="emailHelp"
           />
-          <div id="emailHelp" className="form-text">
-            Tu información no será compartida
-          </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label">
+          <label htmlFor="password" className="form-label">
             Contraseña
           </label>
           <input
             type="password"
             className="form-control"
-            id="exampleInputPassword1"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

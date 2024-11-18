@@ -34,3 +34,12 @@ export const token = {
     }
   },
 };
+
+export const auth = {
+  logout: () => {
+    // Eliminar el token almacenado en localStorage
+    localStorage.removeItem('auth');
+    // Redirigir a la página de login
+    window.location.href = '/login';  // Esto redirige a login
+  },
+};
