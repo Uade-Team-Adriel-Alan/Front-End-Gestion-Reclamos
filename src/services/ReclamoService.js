@@ -43,11 +43,17 @@ const ReclamoService = {
   },
 
   cambiarEstado: async (idReclamo, idEstado) => {
-    const response = await axios.put(`${API_URL}/cambiarEstado`, null, {
-      params: { idReclamo, idEstado },
-    });
-    return response.data;
+    try {
+      const response = await axios.put(`${API_URL}/cambiarEstado`, null, {
+        params: { idReclamo, idEstado },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error en cambiarEstado:', error.response || error);
+      throw new Error('Hubo un problema al cambiar el estado del reclamo.');
+    }
   },
+  
 
   contarReclamosPorEstado: async (idEstado) => {
     const response = await axios.get(`${API_URL}/estado/${idEstado}/contar`);

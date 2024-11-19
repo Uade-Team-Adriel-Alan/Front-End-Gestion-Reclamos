@@ -1,49 +1,43 @@
 import React, { useState } from 'react';
-import { Table, Tag, Space, Modal, Carousel, Button, Select, notification } from 'antd';
-import ReclamoService from '.././services/ReclamoService';
+import { Table, Modal, Button, Select, Tag, Space, notification, Carousel } from 'antd';
+import ReclamoService from '../services/ReclamoService';
 
 const { Option } = Select;
 
 const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado para manejar la visibilidad del modal
-  const [reclamoSeleccionado, setReclamoSeleccionado] = useState(null); // Estado para almacenar el reclamo seleccionado
-  const [nuevoEstado, setNuevoEstado] = useState(null); // Estado para almacenar el nuevo estado seleccionado
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [reclamoSeleccionado, setReclamoSeleccionado] = useState(null);
+  const [nuevoEstado, setNuevoEstado] = useState(null);
 
-  // Función para manejar la apertura del modal
   const showModal = (reclamo) => {
-    setReclamoSeleccionado(reclamo); // Guardamos el reclamo seleccionado
-    setNuevoEstado(reclamo.estadoReclamo); // Inicializamos el estado con el valor actual
-    setIsModalVisible(true); // Mostramos el modal
+    setReclamoSeleccionado(reclamo);
+    setNuevoEstado(reclamo.estadoReclamo);  // Usar el idEstado
+    setIsModalVisible(true);
   };
 
-  // Función para manejar el cierre del modal
   const handleCancel = () => {
-    setIsModalVisible(false); // Cerramos el modal
-    setReclamoSeleccionado(null); // Limpiamos el reclamo seleccionado
-    setNuevoEstado(null); // Limpiamos el estado seleccionado
+    setIsModalVisible(false);
+    setReclamoSeleccionado(null);
+    setNuevoEstado(null);
   };
 
-  // Función para manejar la modificación del estado
   const handleModificarEstado = async () => {
     try {
-      // Llamamos al servicio para cambiar el estado del reclamo
-      await ReclamoService.cambiarEstado(reclamoSeleccionado.idReclamo, nuevoEstado);
-      
-      // Actualizamos el estado del reclamo en la lista
-      const reclamoActualizado = { ...reclamoSeleccionado, estadoReclamo: nuevoEstado };
+      await ReclamoService.cambiarEstado(reclamoSeleccionado.idReclamo, nuevoEstado); // Cambiar a `idEstado` aquí
+      const reclamoActualizado = { 
+        ...reclamoSeleccionado, 
+        estadoReclamo: nuevoEstado // Cambié para usar `nuevoEstado` que es el `idEstado`
+      };
       actualizarReclamo(reclamoActualizado);
 
-      // Mostrar una notificación de éxito
       notification.success({
         message: 'Estado modificado',
-        description: `El estado del reclamo ha sido modificado a ${nuevoEstado}.`,
+        description: `El estado del reclamo ha sido modificado a ${estadoMap[nuevoEstado]}.`,
       });
-      
-      // Cerrar el modal
+
       handleCancel();
     } catch (error) {
       console.error('Error al cambiar el estado:', error);
-      // Mostrar una notificación de error
       notification.error({
         message: 'Error al modificar el estado',
         description: 'Hubo un problema al cambiar el estado del reclamo.',
@@ -51,27 +45,26 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
     }
   };
 
-  // Definición de las columnas para la tabla
+  const estadoMap = {
+    1: 'Pendiente',
+    2: 'En Proceso',
+    3: 'Resuelto',
+    4: 'Cancelado',
+  };
+
   const columns = [
-    {
-      title: 'ID Reclamo',
-      dataIndex: 'idReclamo',
-      key: 'idReclamo',
-    },
-    {
-      title: 'Descripción',
-      dataIndex: 'descripcion',
-      key: 'descripcion',
-    },
     {
       title: 'Estado',
       dataIndex: 'estadoReclamo',
       key: 'estadoReclamo',
-      render: (estado) => (
-        <Tag color={estado === 'Pendiente' ? 'orange' : estado === 'En proceso' ? 'blue' : estado === 'Resuelto' ? 'green' : 'red'}>
-          {estado}
-        </Tag>
-      ),
+      render: (estado) => {
+        const estadoDescripcion = estadoMap[estado] || 'Estado Desconocido';
+        return (
+          <Tag color={estadoDescripcion === 'Pendiente' ? 'orange' : estadoDescripcion === 'En Proceso' ? 'blue' : estadoDescripcion === 'Resuelto' ? 'green' : 'red'}>
+            {estadoDescripcion}
+          </Tag>
+        );
+      },
     },
     {
       title: 'Fecha de Creación',
@@ -97,10 +90,8 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
       <Table
         columns={columns}
         dataSource={reclamos}
-        rowKey="idReclamo" // Usamos el idReclamo como clave única para las filas
+        rowKey="idReclamo"
       />
-
-      {/* Modal con los detalles del reclamo */}
       <Modal
         title="Detalles del Reclamo"
         visible={isModalVisible}
@@ -111,15 +102,13 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
         {reclamoSeleccionado && (
           <div>
             <p><strong>Descripción:</strong> {reclamoSeleccionado.descripcion}</p>
-            <p><strong>Estado:</strong> {reclamoSeleccionado.estadoReclamo}</p>
+            <p><strong>Estado:</strong> {estadoMap[reclamoSeleccionado.estadoReclamo] || 'Estado Desconocido'}</p>
             <p><strong>Fecha de Creación:</strong> {new Date(reclamoSeleccionado.fechaCreacion).toLocaleString()}</p>
             <p><strong>Ubicación:</strong> {reclamoSeleccionado.ubicacion}</p>
             <p><strong>Persona:</strong> {reclamoSeleccionado.persona}</p>
             <p><strong>Edificio:</strong> {reclamoSeleccionado.edificio}</p>
             <p><strong>Unidad:</strong> {reclamoSeleccionado.unidad}</p>
             <p><strong>Tipo de Reclamo:</strong> {reclamoSeleccionado.tipoReclamo}</p>
-            
-            {/* Carrusel de imágenes */}
             {reclamoSeleccionado.imagenes && reclamoSeleccionado.imagenes.length > 0 && (
               <Carousel>
                 {reclamoSeleccionado.imagenes.map((imagen, index) => (
@@ -129,18 +118,17 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
                 ))}
               </Carousel>
             )}
-            
-            {/* Selector de estado con colores */}
             <div style={{ marginTop: 16 }}>
               <Select
-                defaultValue={reclamoSeleccionado.estadoReclamo}
+                value={nuevoEstado}
                 style={{ width: 200 }}
                 onChange={(value) => setNuevoEstado(value)}
+                disabled={reclamoSeleccionado.estadoReclamo === 3} // Estado Resuelto
               >
-                <Option value="1">Pendiente</Option>
-                <Option value="2">En Proceso</Option>
-                <Option value="3">Resuelto</Option>
-                <Option value="4">Cancelado</Option>
+                <Option value={1}>Pendiente</Option>
+                <Option value={2}>En Proceso</Option>
+                <Option value={3}>Resuelto</Option>
+                <Option value={4}>Cancelado</Option>
               </Select>
             </div>
             <Button type="primary" onClick={handleModificarEstado} style={{ marginTop: 16 }}>
