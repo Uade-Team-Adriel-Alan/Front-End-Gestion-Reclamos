@@ -14,6 +14,7 @@ import { AuthProvider } from "./context/AuthContext";
 import "./App.css";
 import PersonaList from "./pages/Personas/PersonasList";
 import PersonaEspecifico from "./pages/Personas/PersonaEspesifico";
+import RoleBasedRoute from "./components/RoleBasedRoute";
 
 const { Content } = Layout;
 
@@ -70,9 +71,9 @@ function App() {
                 <Route
                   path="/personas"
                   element={
-                    <PrivateRoute>
+                    <RoleBasedRoute allowedRoles={["admin"]}>
                       <PersonaList />
-                    </PrivateRoute>
+                    </RoleBasedRoute>
                   }
                 />
                 <Route
