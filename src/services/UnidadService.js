@@ -93,6 +93,13 @@ const UnidadService = {
     });
     return response.data;
   },
+
+  eliminarUnidad: async (codigo, piso, numero) => {
+    const response = await axios.delete(`${API_URL}/eliminar`, {
+      params: { codigo, piso, numero },
+    });
+    return response.data;
+  },
 };
 
 export default UnidadService;

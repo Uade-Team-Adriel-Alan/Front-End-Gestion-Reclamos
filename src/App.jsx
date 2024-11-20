@@ -3,7 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Layout } from "antd";
 import Header from "./components/Header";
-import Login from "./pages/Login";
+import Login from "./components/Login";
 import Home from "./pages/Home";
 import ReclamosPorEdificio from "./pages/Reclamos/ReclamosPorEdificio";
 import UnidadesPorEdificio from "./pages/Unidades/UniadesPorEdificio";

@@ -1,9 +1,12 @@
-import React from "react";
-import { Button } from "antd";
+import React, { useState } from "react";
+import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
+import { DeleteOutlined } from '@ant-design/icons';
 
-function UnidadesCard({ unidad, codigoEdificio}) {
+function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   // Verificar que los datos de la unidad estén completos
   if (!unidad || !unidad.identificador || !unidad.piso || !unidad.numero) {
     console.error('Datos de unidad incompletos:', unidad);
@@ -12,6 +15,19 @@ function UnidadesCard({ unidad, codigoEdificio}) {
 
   const handleVerDetalles = () => {
     navigate(`/unidades/${codigoEdificio}/${unidad.piso}/${unidad.numero}/detalles`);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleEliminarUnidad = () => {
+    eliminarUnidad(codigoEdificio, unidad.piso, unidad.numero); // Llamar al método de eliminar
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -40,6 +56,26 @@ function UnidadesCard({ unidad, codigoEdificio}) {
       >
         Ver detalles
       </Button>
+
+      {/* Mostrar el botón de eliminar solo si eliminarUnidad es una función */}
+      {typeof eliminarUnidad === 'function' && (
+        <Button
+          type="danger"
+          icon={<DeleteOutlined />}
+          onClick={showModal}
+        />
+      )}
+
+      <Modal
+        title="Confirmar Eliminación"
+        visible={isModalVisible}
+        onOk={handleEliminarUnidad}
+        onCancel={handleCancel}
+        okText="Eliminar"
+        cancelText="Cancelar"
+      >
+        <p>¿Estás seguro de que deseas eliminar esta unidad?</p>
+      </Modal>
     </div>
   );
 }

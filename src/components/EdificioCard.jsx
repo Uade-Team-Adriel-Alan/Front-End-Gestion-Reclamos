@@ -1,10 +1,12 @@
 // src/components/EdificioCard.jsx
-import React from "react";
-import { Button } from "antd";
+import React, { useState } from "react";
+import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
+import { DeleteOutlined } from '@ant-design/icons';
 
-function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
+function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio, eliminarEdificio }) {
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleVerReclamos = () => {
     navigate(`/edificios/${codigoEdificio}/reclamos`);
@@ -12,6 +14,19 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
 
   const handleVerUnidades = () => {
     navigate(`/edificios/${codigoEdificio}/unidades`);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true); // Mostrar el modal de confirmación
+  };
+
+  const handleEliminar = () => {
+    eliminarEdificio(codigoEdificio); // Llamar a la función de eliminar
+    setIsModalVisible(false); // Cerrar el modal
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Cerrar el modal si el usuario cancela
   };
 
   return (
@@ -45,7 +60,7 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
         <p style={{ margin: 0, color: "#555" }}>Dirección: {direccion}</p>
       </div>
 
-      {/* Botón de acción */}
+      {/* Botones de acción */}
       <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerReclamos}>
         Ver reclamos
       </Button>
@@ -53,6 +68,27 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio }) {
       <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerUnidades}>
         Ver Unidades
       </Button>
+
+      {/* Mostrar el botón de eliminar solo si eliminarEdificio es una función */}
+      {typeof eliminarEdificio === 'function' && (
+        <>
+          <Button
+            type="danger"
+            icon={<DeleteOutlined />}
+            onClick={showModal} // Mostrar el modal al hacer clic
+          />
+          <Modal
+            title="Confirmar Eliminación"
+            visible={isModalVisible}
+            onOk={handleEliminar}
+            onCancel={handleCancel}
+            okText="Eliminar"
+            cancelText="Cancelar"
+          >
+            <p>¿Estás seguro de que deseas eliminar este edificio?</p>
+          </Modal>
+        </>
+      )}
     </div>
   );
 }

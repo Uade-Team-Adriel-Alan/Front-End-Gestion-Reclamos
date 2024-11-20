@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReclamoService from '../../services/ReclamoService';
-import ReclamoContent from '../ReclamoContent';
+import ReclamoContent from '../../components/ReclamoContent';
 
 const ReclamosPorEdificio = () => {
   const { codigoEdificio } = useParams(); // Obtener el código de la URL

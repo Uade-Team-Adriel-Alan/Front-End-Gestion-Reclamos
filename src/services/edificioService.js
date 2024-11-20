@@ -102,3 +102,13 @@ export const getReclamosPorEdificio = async (codigo) => {
         throw error;
     }
 };
+
+export const eliminarEdificio = async (codigo) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${codigo}/eliminar`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener reclamos del edificio con código ${codigo}:`, error);
+        throw error;
+    }
+};

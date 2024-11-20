@@ -57,7 +57,7 @@ const PersonasList = ({ personas, listStyle, buttonStyle }) => {
               description={`Documento: ${persona.documento}`}
             />
             {/* Mostrar el formulario directamente si el rol es 'comun' */}
-            <FormularioReclamo usuario={persona} />
+            {/* <FormularioReclamo usuario={persona} /> */}
           </List.Item>
         )}
       />

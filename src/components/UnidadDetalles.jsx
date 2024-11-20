@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Card, Typography, Divider } from 'antd';
-import ReclamoContent from '../pages/ReclamoContent';
+import ReclamoContent from './ReclamoContent';
 import UnidadService from '../services/UnidadService';
 import PersonasList from './PersonaUnidad';
 

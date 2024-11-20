@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUnidadesPorEdificio } from "../../services/edificioService";
+import UnidadService from "../../services/UnidadService"; // Importar UnidadService
 import UnidadesCard from "../../components/UnidadesCard";
-import AgregarUnidadModal from "../../components/AgregarUnidadModal"; // Asegúrate de que la ruta sea correcta
-import { Button } from "antd";
+import AgregarUnidadModal from "../../components/AgregarUnidadModal"; 
+import { Button, message } from "antd";
 
 function UnidadesPorEdificio() {
   const { codigoEdificio } = useParams();
@@ -40,6 +41,17 @@ function UnidadesPorEdificio() {
     fetchUnidades(); // Refrescar la lista de unidades después de agregar una nueva
   };
 
+  const eliminarUnidad = async (codigo, piso, numero) => {
+    try {
+      await UnidadService.eliminarUnidad(codigo, piso, numero);
+      message.success('Unidad eliminada exitosamente');
+      fetchUnidades(); // Refrescar la lista de unidades después de eliminar
+    } catch (error) {
+      message.error('Error al eliminar la unidad');
+      console.error(error);
+    }
+  };
+
   if (loading) return <p>Cargando unidades del edificio...</p>;
   if (error) return <p>{error}</p>;
 
@@ -57,6 +69,7 @@ function UnidadesPorEdificio() {
             key={unidad.identificador}
             unidad={unidad} 
             codigoEdificio={codigoEdificio}
+            eliminarUnidad={eliminarUnidad} // Pasar el método de eliminar
           />
         ))
       ) : (

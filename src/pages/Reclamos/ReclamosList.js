@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReclamoService from '../../services/ReclamoService';
-import ReclamoContent from '../ReclamoContent';
+import ReclamoContent from '../../components/ReclamoContent';
 
 const ReclamosList = () => {
   const [data, setData] = useState([]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ShowEdificios from './ShowEdificios';
+import ShowEdificios from '../components/ShowEdificios';
 import { getAllEdificios } from '../services/edificioService';
 
 const ReclamosList = () => {

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import PersonaService from '../services/PersonaSerivce';
 import { Card, Typography, List } from 'antd';
 import UnidadesCard from '../components/UnidadesCard';
-import ReclamoContent from '../pages/ReclamoContent';
+import ReclamoContent from './ReclamoContent';
 
 const { Title, Text } = Typography;
 
