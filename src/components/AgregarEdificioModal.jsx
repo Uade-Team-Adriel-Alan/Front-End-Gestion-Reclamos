@@ -12,9 +12,11 @@ const AgregarEdificioModal = ({ visible, onClose, onEdificioAgregado }) => {
         message.error('Por favor, completa todos los campos.');
         return;
       }
-      await crearEdificio(direccion, nombre);
+      const edificio = await crearEdificio(direccion, nombre);
       message.success('Edificio agregado exitosamente');
-      onEdificioAgregado(); // Notificar al componente padre que se ha agregado un edificio
+      onEdificioAgregado(edificio); // Notificar al componente padre que se ha agregado un edificio
+      setNombre(''); // Vaciar el campo de nombre
+      setDireccion(''); // Vaciar el campo de dirección
       onClose(); // Cerrar el modal
     } catch (error) {
       message.error(error.response?.data || 'Error al agregar el edificio');
