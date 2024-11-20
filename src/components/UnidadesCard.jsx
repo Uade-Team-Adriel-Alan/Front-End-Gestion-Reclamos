@@ -29,7 +29,7 @@ function UnidadesCard({ unidad, codigoEdificio}) {
       <div style={{ flex: 1 }}>
         <h3 style={{ marginBottom: "8px" }}>Piso: {unidad.piso} - Número: {unidad.numero}</h3>
         <p style={{ margin: 0, color: "#555" }}>
-          Estado: {unidad.habitado ? "Habitada" : "No habitada"}
+          Estado: {unidad.habitado === 'S' ? "Habitada" : "No habitada"}
         </p>
       </div>
 

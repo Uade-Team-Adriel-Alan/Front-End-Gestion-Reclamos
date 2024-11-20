@@ -72,6 +72,27 @@ const UnidadService = {
     });
     return response.data;
   },
+
+  eliminarHabitanteUnidad: async (codigo, piso, numero, documento) => {
+    const response = await axios.delete(`${API_URL}/eliminarHabitante`, {
+      params: { codigo, piso, numero, documento },
+    });
+    return response.data;
+  },
+
+  eliminarInquilinoUnidad: async (codigo, piso, numero, documento) => {
+    const response = await axios.delete(`${API_URL}/eliminarInquilino`, {
+      params: { codigo, piso, numero, documento },
+    });
+    return response.data;
+  },
+
+  eliminarDuenioUnidad: async (codigo, piso, numero, documento) => {
+    const response = await axios.delete(`${API_URL}/eliminarDuenio`, {
+      params: { codigo, piso, numero, documento },
+    });
+    return response.data;
+  },
 };
 
 export default UnidadService;

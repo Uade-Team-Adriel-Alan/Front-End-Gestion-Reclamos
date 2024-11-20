@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Card, Typography, Divider } from 'antd';
 import ReclamoContent from '../pages/ReclamoContent';
 import UnidadService from '../services/UnidadService';
+import PersonasList from './PersonaUnidad';
 
 const { Title, Text } = Typography;
 
@@ -15,11 +16,16 @@ const UnidadDetalles = ({ unidad }) => {
       const duenios = await UnidadService.obtenerDueniosPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
       const inquilinos = await UnidadService.obtenerInquilinosPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
       const habitantes = await UnidadService.obtenerHabitantesPorUnidad(unidadData.edificio.codigo, unidadData.piso, unidadData.numero);
+      let habitado = "N"
+      if(inquilinos.length > 0 || habitantes.length > 0){
+        habitado = "S";
+      }
       setUnidadData((prevData) => ({
         ...prevData,
         duenios,
         inquilinos,
         habitantes,
+        habitado,
       }));
     } catch (error) {
       message.error('Error al actualizar los datos de la unidad');
@@ -82,6 +88,39 @@ const UnidadDetalles = ({ unidad }) => {
     }
   };
 
+  const handleEliminarDuenio = async (documento) => {
+    try {
+        await UnidadService.eliminarDuenioUnidad(unidad.edificio.codigo, unidad.piso, unidad.numero, documento);
+        message.success('Persona eliminada exitosamente');
+        actualizarDatosUnidad();
+    } catch (error) {
+        message.error(error.response.data);
+        console.error(error);
+    }
+  };
+
+  const handleEliminarInquilino = async (documento) => {
+    try {
+        await UnidadService.eliminarInquilinoUnidad(unidad.edificio.codigo, unidad.piso, unidad.numero, documento);
+        message.success('Persona eliminada exitosamente');
+        actualizarDatosUnidad();
+    } catch (error) {
+        message.error(error.response.data);
+        console.error(error);
+    }
+  };
+
+  const handleEliminarHabitante = async (documento) => {
+    try {
+        await UnidadService.eliminarHabitanteUnidad(unidad.edificio.codigo, unidad.piso, unidad.numero, documento);
+        message.success('Persona eliminada exitosamente');
+        actualizarDatosUnidad();
+    } catch (error) {
+        message.error(error.response.data);
+        console.error(error);
+    }
+  };
+
   useEffect(() => {
     actualizarDatosUnidad(); // Actualizar datos al montar el componente
   }, []);
@@ -102,27 +141,6 @@ const UnidadDetalles = ({ unidad }) => {
         <Text><strong>Edificio:</strong> {unidadData.edificio.nombre || 'No especificado'}</Text><br />
         <Text><strong>Dirección:</strong> {unidadData.edificio.direccion || 'No especificado'}</Text>
         
-        <Divider />
-        <Title level={4}>Dueños</Title>
-        {unidadData.duenios.map((duenio, index) => (
-          <Text key={index}><strong>{duenio.nombre}</strong> (Documento: {duenio.documento})</Text>
-        ))}
-
-        <Divider />
-        <Title level={4}>Inquilinos</Title>
-        {unidadData.inquilinos.map((inquilino, index) => (
-          <Text key={index}><strong>{inquilino.nombre}</strong> (Documento: {inquilino.documento})</Text>
-        ))}
-
-        <Divider />
-        <Title level={4}>Habitantes</Title>
-        {unidadData.habitantes.map((habitante, index) => (
-          <Text key={index}><strong>{habitante.nombre}</strong> (Documento: {habitante.documento})</Text>
-        ))}
-
-        <Divider />
-        <ReclamoContent data={unidadData.reclamos} />
-
         <Divider />
         <Title level={4}>Acciones</Title>
         <Input
@@ -146,6 +164,24 @@ const UnidadDetalles = ({ unidad }) => {
         <Button type="danger" onClick={handleLiberarUnidad}>
           Liberar Unidad
         </Button>
+        <Divider />
+        
+        <Title level={4}>Dueños</Title>
+        <PersonasList personas={unidadData.duenios} unidad={unidadData} handleEliminarPersona={handleEliminarDuenio} />
+        
+        <Divider />
+        <Title level={4}>Inquilinos</Title>
+        <PersonasList personas={unidadData.inquilinos} unidad={unidadData} handleEliminarPersona={handleEliminarInquilino} />
+
+
+        <Divider />
+        <Title level={4}>Habitantes</Title>
+        <PersonasList personas={unidadData.habitantes} unidad={unidadData} handleEliminarPersona={handleEliminarHabitante} />
+
+        <Divider />
+        <ReclamoContent data={unidadData.reclamos} />
+
+        
       </div>
     </Card>
   );
