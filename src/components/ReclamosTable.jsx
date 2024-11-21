@@ -112,9 +112,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
             {reclamoSeleccionado.imagenes && reclamoSeleccionado.imagenes.length > 0 && (
               <Carousel>
                 {reclamoSeleccionado.imagenes.map((imagen, index) => (
-                  
                   <div key={index}>
-                    {console.log(imagen.path)}
                     <img src={imagen.path} alt={`Imagen ${index + 1}`} style={{ width: '100%', height: 'auto' }} />
                   </div>
                 ))}

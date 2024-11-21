@@ -48,6 +48,17 @@ const PersonaService = {
       throw error;
     }
   },
+
+  // Eliminar una persona
+  eliminarPersona: async (documento) => {
+    try {
+      const response = await axios.delete(`${API_URL}/${documento}`);
+      return response.data; // Retorna el mensaje de éxito
+    } catch (error) {
+      console.error(`Error al eliminar la persona con documento ${documento}:`, error);
+      throw error;
+    }
+  },
 };
 
 export default PersonaService;
