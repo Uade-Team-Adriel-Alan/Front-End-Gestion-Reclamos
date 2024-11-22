@@ -24,6 +24,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
   const handleModificarEstado = async () => {
     try {
       await ReclamoService.cambiarEstado(reclamoSeleccionado.idReclamo, nuevoEstado);
+     
       const reclamoActualizado = {
         ...reclamoSeleccionado,
         estadoReclamo: nuevoEstado,
@@ -54,13 +55,29 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
 
   const columns = [
     {
+      title: "ID Reclamo",
+      dataIndex: "idReclamo",
+      key: "idReclamo",
+      render: (idReclamo) => <strong>{idReclamo}</strong>, // Opcional: puedes estilizar el ID
+    },
+    {
       title: "Estado",
       dataIndex: "estadoReclamo",
       key: "estadoReclamo",
       render: (estado) => {
         const estadoDescripcion = estadoMap[estado] || "Estado Desconocido";
         return (
-          <Tag color={estadoDescripcion === "Pendiente" ? "orange" : estadoDescripcion === "En Proceso" ? "blue" : estadoDescripcion === "Resuelto" ? "green" : "red"}>
+          <Tag
+            color={
+              estadoDescripcion === "Pendiente"
+                ? "orange"
+                : estadoDescripcion === "En Proceso"
+                ? "blue"
+                : estadoDescripcion === "Resuelto"
+                ? "green"
+                : "red"
+            }
+          >
             {estadoDescripcion}
           </Tag>
         );
@@ -84,6 +101,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
       ),
     },
   ];
+  
 
   return (
     <>
@@ -91,6 +109,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
       <Modal title="Detalles del Reclamo" visible={isModalVisible} onCancel={handleCancel} footer={null} width={800}>
         {reclamoSeleccionado && (
           <div>
+           
             <p><strong>Descripción:</strong> {reclamoSeleccionado.descripcion}</p>
             <p><strong>Estado:</strong> {estadoMap[reclamoSeleccionado.estadoReclamo] || "Estado Desconocido"}</p>
             <p><strong>Fecha de Creación:</strong> {new Date(reclamoSeleccionado.fechaCreacion).toLocaleString()}</p>
@@ -100,8 +119,10 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
             <p><strong>Unidad:</strong> {reclamoSeleccionado.unidad}</p>
             <p><strong>Tipo de Reclamo:</strong> {reclamoSeleccionado.tipoReclamo}</p>
             {reclamoSeleccionado.imagenes && reclamoSeleccionado.imagenes.length > 0 && (
+              
               <Carousel>
                 {reclamoSeleccionado.imagenes.map((imagen, index) => (
+                  
                   <div key={index}>
                     <img src={imagen.path} alt={`Imagen ${index + 1}`} style={{ width: "100%", height: "auto" }} />
                   </div>

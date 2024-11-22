@@ -20,8 +20,10 @@ const ReclamoService = {
 
   obtenerReclamoPorNumero: async (id) => {
     const response = await axios.get(`${API_URL}/${id}`);
-    return response.data;
+    const reclamo = response.data;
+    return Array.isArray(reclamo) ? reclamo : [reclamo]; // Devuelve un arreglo siempre
   },
+  
 
   obtenerReclamosPorPersona: async (documento) => {
     const response = await axios.get(`${API_URL}/persona/${documento}`);

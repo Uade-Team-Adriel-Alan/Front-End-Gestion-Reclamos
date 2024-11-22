@@ -78,7 +78,7 @@ const ReclamosList = () => {
 
       // Filtrar por número
       if (filter.numero) {
-        filtered = await ReclamoService.obtenerReclamoPorNumero(filter.numero);
+        filtered = await ReclamoService.obtenerReclamoPorNumero(parseInt(filter.numero));
       }
 
       // Filtrar por edificio
