@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { DeleteOutlined } from '@ant-design/icons';
+import ReclamoForm from './ReclamoForm'; // Importa el formulario de reclamo
 
 function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isReclamoFormVisible, setIsReclamoFormVisible] = useState(false); // Estado para el formulario de reclamo
 
   // Verificar que los datos de la unidad estén completos
   if (!unidad || !unidad.identificador || !unidad.piso || !unidad.numero) {
@@ -17,17 +19,12 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
     navigate(`/unidades/${codigoEdificio}/${unidad.piso}/${unidad.numero}/detalles`);
   };
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const handleAbrirFormularioReclamo = () => {
+    setIsReclamoFormVisible(true); // Mostrar el formulario de reclamo
   };
 
-  const handleEliminarUnidad = () => {
-    eliminarUnidad(codigoEdificio, unidad.piso, unidad.numero); // Llamar al método de eliminar
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleCerrarFormularioReclamo = () => {
+    setIsReclamoFormVisible(false); // Cerrar el formulario de reclamo
   };
 
   return (
@@ -57,25 +54,39 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
         Ver detalles
       </Button>
 
-      {/* Mostrar el botón de eliminar solo si eliminarUnidad es una función */}
-      {typeof eliminarUnidad === 'function' && (
-        <Button
-          type="danger"
-          icon={<DeleteOutlined />}
-          onClick={showModal}
-        />
-      )}
+      {/* Botón para abrir el formulario de reclamo */}
+      <Button
+        type="default" // Botón blanco
+        style={{ borderRadius: "5px", marginRight: "8px" }}
+        onClick={handleAbrirFormularioReclamo}
+      >
+        Agregar Reclamo
+      </Button>
 
+      {/* Modal de confirmación de eliminación */}
       <Modal
         title="Confirmar Eliminación"
         visible={isModalVisible}
-        onOk={handleEliminarUnidad}
-        onCancel={handleCancel}
+        onOk={() => {
+          eliminarUnidad(codigoEdificio, unidad.piso, unidad.numero); // Llamar al método de eliminar
+          setIsModalVisible(false);
+        }}
+        onCancel={() => setIsModalVisible(false)}
         okText="Eliminar"
         cancelText="Cancelar"
       >
         <p>¿Estás seguro de que deseas eliminar esta unidad?</p>
       </Modal>
+
+      {/* Mostrar el formulario de reclamo solo cuando el estado sea verdadero */}
+      {isReclamoFormVisible && (
+        <ReclamoForm
+          codigoEdificio={codigoEdificio}
+          piso={unidad.piso}
+          numero={unidad.numero}
+          onReclamoAgregado={handleCerrarFormularioReclamo} // Cuando el reclamo sea agregado, cerramos el formulario
+        />
+      )}
     </div>
   );
 }

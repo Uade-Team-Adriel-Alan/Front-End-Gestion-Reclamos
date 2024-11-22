@@ -61,7 +61,7 @@ function EdificioCard({ nombre, imagenURL, direccion, codigoEdificio, eliminarEd
       </div>
 
       {/* Botones de acción */}
-      <Button type="primary" style={{ borderRadius: "5px" }} onClick={handleVerReclamos}>
+      <Button type="primary" style={{ borderRadius: "5px", marginRight: "8px" }} onClick={handleVerReclamos}>
         Ver reclamos
       </Button>
 

@@ -29,7 +29,7 @@ const UnidadEspecifico = () => {
   if (loading) return <p>Cargando detalles de la unidad...</p>;
   if (error) return <p>{error}</p>;
 
-  return (data ? <UnidadDetalles unidad={data} /> : <p>No se encontraron datos de la unidad.</p>);
+  return (data ? <UnidadDetalles unidad={data} codigoEdificio = {codigoEdificio} piso ={piso} numero={numero} /> : <p>No se encontraron datos de la unidad.</p>);
 };
 
 export default UnidadEspecifico;
