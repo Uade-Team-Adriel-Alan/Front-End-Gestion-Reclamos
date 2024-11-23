@@ -1,5 +1,5 @@
-import React from "react";
-import { Layout, Menu } from "antd";
+import React, { useState } from "react";
+import { Layout, Menu, Switch } from "antd";
 import {
   HomeOutlined,
   LoginOutlined,
@@ -14,13 +14,18 @@ const { Sider } = Layout;
 
 export default function Header() {
   const { auth, logout } = useAuth(); // Obtén el usuario autenticado y la función de logout
+  const [theme, setTheme] = useState("light"); // Estado para manejar el tema
+
+  const toggleTheme = (checked) => {
+    setTheme(checked ? "dark" : "light"); // Cambia el estado según el valor del interruptor
+  };
 
   return (
     <Sider
       width={250}
       style={{
         height: "100vh",
-        backgroundColor: "#f0f2f5", // Fondo claro para el sidebar
+        backgroundColor: theme === "dark" ? "#001529" : "#f0f2f5", // Cambia el fondo según el tema
       }}
     >
       <div
@@ -30,19 +35,33 @@ export default function Header() {
           fontWeight: "bold",
           textAlign: "center",
           borderBottom: "1px solid #ddd",
+          color: theme === "dark" ? "#fff" : "#000", // Cambia el color del texto según el tema
         }}
       >
         Mi Aplicación
       </div>
+      <div
+        style={{
+          textAlign: "center",
+          margin: "16px 0",
+        }}
+      >
+        <Switch
+          checked={theme === "dark"}
+          onChange={toggleTheme}
+          checkedChildren="Dark"
+          unCheckedChildren="Light"
+        />
+      </div>
       <Menu
         mode="vertical"
         defaultSelectedKeys={["1"]}
+        theme={theme} // Aplica el tema al menú
         style={{
           borderRight: 0,
         }}
       >
         <Menu.Item key="1" icon={<HomeOutlined />}>
-          {/* Verifica el rol para redirigir al destino correspondiente */}
           {auth?.rol === "admin" ? (
             <Link to="/">Inicio</Link>
           ) : (
