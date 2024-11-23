@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { List, Button, Input, Pagination, Modal, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import '../App.css'; // Asegúrate de importar App.css
+import CredentialsModal from './CredentialsModal'; // Importar el nuevo componente
 
 const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => {
   const [searchText, setSearchText] = useState("");
@@ -10,6 +11,8 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [personaAEliminar, setPersonaAEliminar] = useState(null); // Para almacenar la persona a eliminar
   const [loading, setLoading] = useState(false); // Estado para controlar la carga
+  const [isCredentialsModalVisible, setIsCredentialsModalVisible] = useState(false); // Estado para el modal de credenciales
+  const [personaCredenciales, setPersonaCredenciales] = useState(null); // Para almacenar la persona cuyas credenciales se van a ver
   const pageSize = 10;
 
   const navigate = useNavigate();
@@ -33,6 +36,11 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
     setIsModalVisible(true); // Mostrar el modal
   };
 
+  const showCredentialsModal = (documento) => {
+    setPersonaCredenciales(documento); // Establecer la persona cuyas credenciales se van a ver
+    setIsCredentialsModalVisible(true); // Mostrar el modal de credenciales
+  };
+
   const handleEliminar = async () => {
     if (personaAEliminar) {
       setLoading(true); // Iniciar la carga
@@ -46,6 +54,11 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
   const handleCancel = () => {
     setIsModalVisible(false); // Cerrar el modal si el usuario cancela
     setPersonaAEliminar(null); // Limpiar la persona a eliminar
+  };
+
+  const handleCredentialsCancel = () => {
+    setIsCredentialsModalVisible(false); // Cerrar el modal de credenciales
+    setPersonaCredenciales(null); // Limpiar la persona cuyas credenciales se están viendo
   };
 
   return (
@@ -70,6 +83,11 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
               >
                 Ver detalles
               </Button>,
+              <Button
+                type="default"
+                icon={<EyeOutlined />} // Botón para ver credenciales
+                onClick={() => showCredentialsModal(persona.documento)} // Mostrar el modal de credenciales
+              />,
               <Button
                 type="danger"
                 icon={<DeleteOutlined />}
@@ -114,6 +132,13 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
           </>
         )}
       </Modal>
+
+      {/* Modal para ver credenciales */}
+      <CredentialsModal
+        visible={isCredentialsModalVisible}
+        documento={personaCredenciales}
+        onCancel={handleCredentialsCancel}
+      />
     </div>
   );
 };
