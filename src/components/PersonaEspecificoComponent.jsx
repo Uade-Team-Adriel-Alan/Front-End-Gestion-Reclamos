@@ -12,6 +12,7 @@ const PersonaEspecificoComponent = () => {
   const [persona, setPersona] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     const fetchPersona = async () => {

@@ -39,31 +39,33 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
     }
 
     try {
-      // Si es zona común, enviar el reclamo con la zona
-      if (zonaComun) {
-        await ReclamoService.agregarReclamoZonaComun({
-          codigo: codigoEdificio,
-          documento: auth.documento,
-          idUbicacion: zonaComun,
-          descripcion: tipoReclamo ? tipoReclamo.descripcion : '',
-          idTipTrec: tipoReclamo ? tipoReclamo.id : '',
-        });
-      } else {
-        await ReclamoService.agregarReclamo({
-          codigo: codigoEdificio || 'No especificado',
-          piso: piso || 'No especificado',
-          numero: numero || 'No especificado',
-          documento: auth.documento,
-          descripcion: tipoReclamo ? tipoReclamo.descripcion : '',
-          idTipTrec: tipoReclamo ? tipoReclamo.id : '',
-          
-        });
-      }
+      const formData = new FormData();
       
+      // Agregar parámetros al FormData
+      formData.append('codigo', codigoEdificio);
+      formData.append('documento', auth.documento);
+      formData.append('descripcion', tipoReclamo ? tipoReclamo.descripcion : '');
+      formData.append('idTipTrec', tipoReclamo ? tipoReclamo.id : '');
+      if (zonaComun) {
+        formData.append('idUbicacion', zonaComun);
+      } else {
+        formData.append('piso', piso || 'No especificado');
+        formData.append('numero', numero || 'No especificado');
+      }
+
+      // Agregar las imágenes si existen
+      imagenes.forEach((img) => {
+        formData.append('imagenes', img); // Asegúrate de que 'img' sea un archivo
+      });
+
+      // Enviar la solicitud
+      if (zonaComun) {
+        await ReclamoService.agregarReclamoZonaComun(formData);
+      } else {
+        await ReclamoService.agregarReclamo(formData);
+      }
 
       message.success('Reclamo agregado exitosamente');
-      console.log(codigoEdificio,piso,numero)
-      console.log()
       onReclamoAgregado(); // Notificar que el reclamo fue agregado
       handleCloseModal(); // Cerrar el modal
     } catch (error) {
@@ -88,8 +90,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
           <Form.Item
             label="Tipo de Reclamo"
             name="idTipTrec"
-            rules={[{ required: true, message: 'Seleccione el tipo de reclamo' }]}
-          >
+            rules={[{ required: true, message: 'Seleccione el tipo de reclamo' }]}>
             <Select
               placeholder="Seleccione el tipo de reclamo"
               onChange={(value) => setTipoReclamo(tiposReclamo.find((tipo) => tipo.id === value))}

@@ -30,27 +30,32 @@ const ReclamoService = {
     return response.data;
   },
 
-  agregarReclamo: async (params) => {
+  agregarReclamo: async (formData) => {
     try {
-      const response = await axios.post(`${API_URL}/agregar`, null, {
-        params: { ...params },
+      const response = await axios.post(`${API_URL}/agregar`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Asegúrate de establecer el encabezado adecuado
+        },
       });
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-
-  agregarReclamoZonaComun: async (params) => {
+  
+  agregarReclamoZonaComun: async (formData) => {
     try {
-      const response = await axios.post(`${API_URL}/agregarZonaComun`, null, {
-        params: { ...params },
+      const response = await axios.post(`${API_URL}/agregarZonaComun`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Especificar que estamos enviando datos de formulario
+        },
       });
       return response.data;
     } catch (error) {
       throw error;
     }
   },
+  
 
   cambiarEstado: async (idReclamo, idEstado) => {
     try {
