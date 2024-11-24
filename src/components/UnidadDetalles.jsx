@@ -3,10 +3,12 @@ import { Button, Input, message, Card, Typography, Divider } from 'antd';
 import ReclamoContent from './ReclamoContent';
 import UnidadService from '../services/UnidadService';
 import PersonasList from './PersonaUnidad';
+import { useAuth } from '../context/AuthContext'; // Importar el contexto de autenticación
 
 const { Title, Text } = Typography;
 
 const UnidadDetalles = ({ unidad }) => {
+  const { auth } = useAuth(); // Accede al usuario autenticado
   const [documento, setDocumento] = useState('');
   const [unidadData, setUnidadData] = useState(unidad);
 
@@ -142,29 +144,33 @@ const UnidadDetalles = ({ unidad }) => {
         <Text><strong>Dirección:</strong> {unidadData.edificio.direccion || 'No especificado'}</Text>
         
         <Divider />
-        <Title level={4}>Acciones</Title>
-        <Input
-          placeholder="Documento"
-          value={documento}
-          onChange={(e) => setDocumento(e.target.value)}
-          style={{ marginBottom: '8px', width: '300px' }}
-        />
-        <Button type="primary" onClick={handleAgregarDuenio} style={{ marginRight: '8px' }}>
-          Agregar Dueño
-        </Button>
-        <Button type="primary" onClick={handleTransferirUnidad} style={{ marginRight: '8px' }}>
-          Transferir Unidad
-        </Button>
-        <Button type="primary" onClick={handleAgregarInquilino} style={{ marginRight: '8px' }}>
-          Agregar Inquilino
-        </Button>
-        <Button type="primary" onClick={handleAgregarHabitante} style={{ marginRight: '8px' }}>
-          Agregar Habitante
-        </Button>
-        <Button type="danger" onClick={handleLiberarUnidad}>
-          Liberar Unidad
-        </Button>
-        <Divider />
+        {auth?.rol === "admin" && ( // Mostrar acciones solo si el rol es admin
+          <>
+            <Title level={4}>Acciones</Title>
+            <Input
+              placeholder="Documento"
+              value={documento}
+              onChange={(e) => setDocumento(e.target.value)}
+              style={{ marginBottom: '8px', width: '300px' }}
+            />
+            <Button type="primary" onClick={handleAgregarDuenio} style={{ marginRight: '8px' }}>
+              Agregar Dueño
+            </Button>
+            <Button type="primary" onClick={handleTransferirUnidad} style={{ marginRight: '8px' }}>
+              Transferir Unidad
+            </Button>
+            <Button type="primary" onClick={handleAgregarInquilino} style={{ marginRight: '8px' }}>
+              Agregar Inquilino
+            </Button>
+            <Button type="primary" onClick={handleAgregarHabitante} style={{ marginRight: '8px' }}>
+              Agregar Habitante
+            </Button>
+            <Button type="danger" onClick={handleLiberarUnidad}>
+              Liberar Unidad
+            </Button>
+            <Divider />
+          </>
+        )}
         
         <Title level={4}>Dueños</Title>
         <PersonasList personas={unidadData.duenios} unidad={unidadData} handleEliminarPersona={handleEliminarDuenio} />
@@ -173,15 +179,12 @@ const UnidadDetalles = ({ unidad }) => {
         <Title level={4}>Inquilinos</Title>
         <PersonasList personas={unidadData.inquilinos} unidad={unidadData} handleEliminarPersona={handleEliminarInquilino} />
 
-
         <Divider />
         <Title level={4}>Habitantes</Title>
         <PersonasList personas={unidadData.habitantes} unidad={unidadData} handleEliminarPersona={handleEliminarHabitante} />
 
         <Divider />
         <ReclamoContent data={unidadData.reclamos} />
-
-        
       </div>
     </Card>
   );

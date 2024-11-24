@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Table, Modal, Button, Select, Tag, Space, notification, Carousel } from "antd";
 import ReclamoService from "../services/ReclamoService";
+import { useAuth } from "../context/AuthContext";
 
 const { Option } = Select;
 
 const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
+  const { auth } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reclamoSeleccionado, setReclamoSeleccionado] = useState(null);
   const [nuevoEstado, setNuevoEstado] = useState(null);
@@ -106,10 +108,16 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
   return (
     <>
       <Table columns={columns} dataSource={reclamos} rowKey="idReclamo" />
-      <Modal title="Detalles del Reclamo" visible={isModalVisible} onCancel={handleCancel} footer={null} width={800}>
+      <Modal 
+        title="Detalles del Reclamo" 
+        visible={isModalVisible} 
+        onCancel={handleCancel} 
+        footer={null} 
+        width={800}
+        bodyStyle={{ padding: '20px' }}
+      >
         {reclamoSeleccionado && (
           <div>
-           
             <p><strong>Descripción:</strong> {reclamoSeleccionado.descripcion}</p>
             <p><strong>Estado:</strong> {estadoMap[reclamoSeleccionado.estadoReclamo] || "Estado Desconocido"}</p>
             <p><strong>Fecha de Creación:</strong> {new Date(reclamoSeleccionado.fechaCreacion).toLocaleString()}</p>
@@ -119,27 +127,31 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
             <p><strong>Unidad:</strong> {reclamoSeleccionado.unidad}</p>
             <p><strong>Tipo de Reclamo:</strong> {reclamoSeleccionado.tipoReclamo}</p>
             {reclamoSeleccionado.imagenes && reclamoSeleccionado.imagenes.length > 0 && (
-              
               <Carousel>
                 {reclamoSeleccionado.imagenes.map((imagen, index) => (
-                  
                   <div key={index}>
-                    <img src={imagen.path} alt={`Imagen ${index + 1}`} style={{ width: "100%", height: "auto" }} />
+                    <img 
+                      src={imagen.path} 
+                      alt={`Imagen ${index + 1}`} 
+                      style={{ width: "100%", height: "auto", maxHeight: "500px", objectFit: "contain" }}
+                    />
                   </div>
                 ))}
               </Carousel>
             )}
-            <div style={{ marginTop: 16 }}>
-              <Select value={nuevoEstado} style={{ width: 200 }} onChange={(value) => setNuevoEstado(value)} disabled={reclamoSeleccionado.estadoReclamo === 3}>
-                <Option value={1}>Pendiente</Option>
-                <Option value={2}>En Proceso</Option>
-                <Option value={3}>Resuelto</Option>
-                <Option value={4}>Cancelado</Option>
-              </Select>
-            </div>
-            <Button type="primary" onClick={handleModificarEstado} style={{ marginTop: 16 }}>
-              Modificar Estado
-            </Button>
+            {auth?.rol === "admin" && (
+              <div style={{ marginTop: 16 }}>
+                <Select value={nuevoEstado} style={{ width: 200 }} onChange={(value) => setNuevoEstado(value)} disabled={reclamoSeleccionado.estadoReclamo === 3}>
+                  <Option value={1}>Pendiente</Option>
+                  <Option value={2}>En Proceso</Option>
+                  <Option value={3}>Resuelto</Option>
+                  <Option value={4}>Cancelado</Option>
+                </Select>
+                <Button type="primary" onClick={handleModificarEstado} style={{ marginLeft: 16 }}>
+                  Modificar Estado
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </Modal>
