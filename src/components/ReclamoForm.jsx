@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal, Select, Upload, message } from 'antd';
+import { Button, Form, Modal, Select, Upload, message, Input } from 'antd';
 import ReclamoService from '../services/ReclamoService';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +11,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
   const [imagenes, setImagenes] = useState([]);
   const [zonaComun, setZonaComun] = useState(null);
   const [tipoReclamo, setTipoReclamo] = useState(null); // Guardará el id del tipo de reclamo seleccionado
+  const [descripcion, setDescripcion] = useState(''); // Estado para la descripción del reclamo
 
   const tiposReclamo = [
     { id: 1, descripcion: 'Mucho humo' },
@@ -25,6 +26,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+    setDescripcion(''); // Limpiar la descripción al cerrar el modal
   };
 
   const handleSubmit = async (values) => {
@@ -44,7 +46,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
       // Agregar parámetros al FormData
       formData.append('codigo', codigoEdificio);
       formData.append('documento', auth.documento);
-      formData.append('descripcion', tipoReclamo ? tipoReclamo.descripcion : '');
+      formData.append('descripcion', descripcion); // Usar la descripción ingresada
       formData.append('idTipTrec', tipoReclamo ? tipoReclamo.id : '');
       if (zonaComun) {
         formData.append('idUbicacion', zonaComun);
@@ -101,6 +103,16 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
                 </Option>
               ))}
             </Select>
+          </Form.Item>
+
+          <Form.Item label="Descripción (máximo 1000 caracteres)">
+            <Input.TextArea
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              maxLength={1000} // Limitar a 1000 caracteres
+              placeholder="Ingrese una descripción del reclamo"
+              rows={4}
+            />
           </Form.Item>
 
           <Form.Item label="Zona Común (opcional)">
