@@ -24,8 +24,9 @@ export default function Header() {
     <Sider
       width={250}
       style={{
-       // position: "fixed", // ESTO HACE QUE 
-        bottom: 0,
+        position: "fixed", // Fijar el Sider en la parte izquierda
+        top: 0, // Alinear al top de la pantalla
+        bottom: 0, // Asegurarse de que ocupe hasta el fondo
         height: "100vh", // Ocupa todo el alto de la pantalla
         backgroundColor: theme === "dark" ? "#001529" : "#f0f2f5", // Cambia el fondo según el tema
       }}
