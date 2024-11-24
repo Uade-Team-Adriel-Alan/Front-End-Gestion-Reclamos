@@ -124,7 +124,7 @@ const ReclamosTable = ({ reclamos, actualizarReclamo }) => {
             <p><strong>Ubicación:</strong> {reclamoSeleccionado.ubicacion}</p>
             <p><strong>Persona:</strong> {reclamoSeleccionado.persona}</p>
             <p><strong>Edificio:</strong> {reclamoSeleccionado.edificio}</p>
-            <p><strong>Unidad:</strong> {reclamoSeleccionado.unidad}</p>
+            <p><strong>Unidad:</strong> {parseInt(reclamoSeleccionado.unidad, 10) + 1}</p>
             <p><strong>Tipo de Reclamo:</strong> {reclamoSeleccionado.tipoReclamo}</p>
             {reclamoSeleccionado.imagenes && reclamoSeleccionado.imagenes.length > 0 && (
               <Carousel>
