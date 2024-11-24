@@ -32,7 +32,7 @@ const EdificioList = () => {
       message.success('Edificio eliminado exitosamente');
       setData((prevData) => prevData.filter(edificio => edificio.codigo !== codigo));
     } catch (error) {
-      message.error('Error al eliminar el edificio');
+      message.error(error.response.data);
       console.error(error);
     }
   };

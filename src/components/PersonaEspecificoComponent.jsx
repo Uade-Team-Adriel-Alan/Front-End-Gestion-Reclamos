@@ -20,7 +20,7 @@ const PersonaEspecificoComponent = () => {
         const data = await PersonaService.getPersonaByDocumento(documento);
         setPersona(data);
       } catch (error) {
-        setError('Error al cargar los detalles de la persona.');
+        setError(error.response?.data || 'Error al cargar los detalles de la persona.');
         console.error(error);
       } finally {
         setLoading(false);

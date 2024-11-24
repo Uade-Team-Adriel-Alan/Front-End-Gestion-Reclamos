@@ -47,8 +47,7 @@ const PersonaList = ({ onVerMasDetalles, listStyle, buttonStyle }) => {
       setPersonas((prev) => [...prev, nuevaPersona]); // Actualizar la lista de personas
       handleModalClose(); // Cerrar el modal
     } catch (error) {
-      message.error('Error al agregar la persona');
-      console.error(error);
+      message.error(error.response.data);
     }
   };
 
@@ -58,8 +57,7 @@ const PersonaList = ({ onVerMasDetalles, listStyle, buttonStyle }) => {
       message.success('Persona eliminada exitosamente');
       setPersonas((prev) => prev.filter(persona => persona.documento !== documento)); // Actualizar la lista de personas
     } catch (error) {
-      message.error('Error al eliminar la persona');
-      console.error(error);
+      message.error(error.response.data);
     }
   };
 
