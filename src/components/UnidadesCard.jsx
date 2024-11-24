@@ -27,6 +27,17 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
     setIsReclamoFormVisible(false); // Cerrar el formulario de reclamo
   };
 
+  const showModal = () => {
+    setIsModalVisible(true)};
+  
+  const handleEliminarUnidad = () => {
+    eliminarUnidad(codigoEdificio, unidad.piso, unidad.numero); // Llamar al método de eliminar
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+  setIsModalVisible(false)};
+
   return (
     <div
       style={{
@@ -62,16 +73,21 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
       >
         Agregar Reclamo
       </Button>
+      {/* Mostrar el botón de eliminar solo si eliminarUnidad es una función */}
+      {typeof eliminarUnidad === 'function' && (
+      <Button
+        type="danger"
+        icon={<DeleteOutlined />}
+        onClick={showModal}
+      />
+      )}
 
       {/* Modal de confirmación de eliminación */}
       <Modal
         title="Confirmar Eliminación"
         visible={isModalVisible}
-        onOk={() => {
-          eliminarUnidad(codigoEdificio, unidad.piso, unidad.numero); // Llamar al método de eliminar
-          setIsModalVisible(false);
-        }}
-        onCancel={() => setIsModalVisible(false)}
+        onOk={handleEliminarUnidad}
+        onCancel={handleCancel}
         okText="Eliminar"
         cancelText="Cancelar"
       >
