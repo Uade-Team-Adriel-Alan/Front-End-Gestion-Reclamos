@@ -14,3 +14,9 @@
   text-decoration: none; /* Quita subrayado */
 }
 
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
