@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { List, Button, Input, Pagination, Modal, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, InfoCircleOutlined  } from '@ant-design/icons';
 import '../App.css'; // Asegúrate de importar App.css
 import CredentialsModal from './CredentialsModal'; // Importar el nuevo componente
 
@@ -85,7 +85,7 @@ const PersonasList = ({ personas, listStyle, buttonStyle, eliminarPersona }) => 
               </Button>,
               <Button
                 type="default"
-                icon={<EyeOutlined />} // Botón para ver credenciales
+                icon={<InfoCircleOutlined />} // Botón para ver credenciales
                 onClick={() => showCredentialsModal(persona.documento)} // Mostrar el modal de credenciales
               />,
               <Button

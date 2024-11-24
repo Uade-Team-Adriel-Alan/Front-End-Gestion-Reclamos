@@ -6,6 +6,7 @@ import {
   UserOutlined,
   ProfileOutlined,
   LogoutOutlined,
+  MehOutlined
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -82,7 +83,7 @@ export default function Header() {
           </Menu.Item>
         )}
         {auth && (
-          <Menu.Item key="4" icon={<UserOutlined />}>
+          <Menu.Item key="4" icon={<MehOutlined />}>
             <Link to={`/personas/${auth.documento}`}>Mi perfil</Link>
           </Menu.Item>
         )}
