@@ -27,7 +27,7 @@ function AppLayout({ children }) {
       {/* Renderiza el header solo si no estamos en la página de login */}
       {!isLoginPage && <Header />}
       <Layout>
-        <Content style={{ marginLeft: 250, padding: "16px", backgroundColor: "#f5ebe0" }}>
+        <Content style={{ marginLeft: isLoginPage ? 0 : 250, padding: "16px", backgroundColor: "#f5ebe0" }}>
           {children}
         </Content>
       </Layout>

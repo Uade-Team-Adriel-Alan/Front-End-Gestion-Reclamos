@@ -35,7 +35,14 @@ function Login() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+    <div style={{ 
+      display: "flex", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      height: "100vh", 
+      margin: 0,
+      padding: 0
+    }}>
       <Card style={{ width: 400, padding: 24 }}>
         <Title level={3} style={{ textAlign: "center" }}>
           Iniciar sesión
