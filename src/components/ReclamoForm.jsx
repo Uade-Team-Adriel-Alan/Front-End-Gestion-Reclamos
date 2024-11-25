@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const { Option } = Select;
 
-const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
+const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, onClose }) => {
   const { auth } = useAuth(); // Accede al usuario autenticado
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imagenes, setImagenes] = useState([]);
@@ -84,8 +84,8 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado }) => {
 
       <Modal
         title="Crear Reclamo"
-        visible={isModalVisible}
-        onCancel={handleCloseModal}
+        visible={visible}
+        onCancel={onClose}
         footer={null}
       >
         <Form layout="vertical" onFinish={handleSubmit}>

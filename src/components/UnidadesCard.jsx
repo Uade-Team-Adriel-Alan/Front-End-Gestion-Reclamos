@@ -75,13 +75,14 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
 
       {/* Botón para abrir el formulario de reclamo */}
       {auth?.rol === "comun" && ( // Mostrar solo si el rol es "comun"
-        <Button
-          type="default" // Botón blanco
-          style={{ borderRadius: "5px", marginRight: "8px" }}
-          onClick={handleAbrirFormularioReclamo}
-        >
-          Agregar Reclamo
-        </Button>
+       <Button
+       type="default"
+       style={{ borderRadius: "5px", marginRight: "8px" }}
+       onClick={() => setIsReclamoFormVisible(true)} // Mostramos el formulario directamente
+     >
+       Agregar Reclamo
+     </Button>
+     
       )}
 
       {/* Mostrar el botón de eliminar solo si eliminarUnidad es una función */}
@@ -107,7 +108,9 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
           codigoEdificio={codigoEdificio}
           piso={unidad.piso}
           numero={unidad.numero}
-          onReclamoAgregado={handleCerrarFormularioReclamo} // Cuando el reclamo sea agregado, cerramos el formulario
+          visible={isReclamoFormVisible} // Controla si se muestra el modal
+          onClose={handleCerrarFormularioReclamo} // Cierra el modal
+          onReclamoAgregado={handleCerrarFormularioReclamo} // Actualiza estado tras agregar el reclamo
         />
       )}
     </div>
