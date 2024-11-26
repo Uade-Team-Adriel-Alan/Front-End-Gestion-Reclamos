@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const { Option } = Select;
 
-const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, onClose }) => {
+const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, onClose,habitante }) => {
   const { auth } = useAuth(); // Accede al usuario autenticado
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imagenes, setImagenes] = useState([]);
@@ -22,6 +22,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, 
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
+    
   };
 
   const handleCloseModal = () => {
@@ -30,6 +31,7 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, 
   };
 
   const handleSubmit = async (values) => {
+    console.log(habitante);
     if (!auth?.documento) {
       message.error('No se encontró el documento del usuario autenticado.');
       return;
@@ -115,12 +117,16 @@ const ReclamoForm = ({ codigoEdificio, piso, numero, onReclamoAgregado,visible, 
             />
           </Form.Item>
 
-          <Form.Item label="Zona Común (opcional)">
-            <Select
-              placeholder="Seleccione una zona común"
-              onChange={(value) => setZonaComun(value)}
-              allowClear
-            >
+          <Form.Item
+        label="Zona Común (opcional)"
+          name="zonaComun"
+          rules={habitante ? [{ required: true, message: 'Debe seleccionar una zona común.' }] : []}
+        >
+          <Select
+            placeholder="Seleccione una zona común"
+            onChange={(value) => setZonaComun(value)}
+            allowClear
+          >
               <Option value={1}>SUM</Option>
               <Option value={2}>Pileta</Option>
               <Option value={3}>Sala de estar</Option>

@@ -5,7 +5,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import ReclamoForm from "./ReclamoForm"; // Importa el formulario de reclamo
 import { useAuth } from "../context/AuthContext"; // Importa el contexto de autenticación
 
-function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
+function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad,habitante}) {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isReclamoFormVisible, setIsReclamoFormVisible] = useState(false); // Estado para el formulario de reclamo
@@ -44,6 +44,11 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
     setIsModalVisible(false);
   };
 
+  const handleVerReclamos = () => {
+    navigate(`/edificios/${codigoEdificio}/reclamos`);
+  };
+
+
   return (
     <div
       style={{
@@ -65,6 +70,10 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
         </p>
       </div>
 
+      <Button type="primary" style={{ borderRadius: "5px", marginRight: "8px" }} onClick={handleVerReclamos}>
+        Ver reclamos
+      </Button>
+
       <Button
         type="primary"
         style={{ borderRadius: "5px", marginRight: "8px" }}
@@ -82,6 +91,8 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
      >
        Agregar Reclamo
      </Button>
+
+     
      
       )}
 
@@ -111,6 +122,7 @@ function UnidadesCard({ unidad, codigoEdificio, eliminarUnidad }) {
           visible={isReclamoFormVisible} // Controla si se muestra el modal
           onClose={handleCerrarFormularioReclamo} // Cierra el modal
           onReclamoAgregado={handleCerrarFormularioReclamo} // Actualiza estado tras agregar el reclamo
+          habitante = {habitante}
         />
       )}
     </div>

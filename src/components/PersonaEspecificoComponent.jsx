@@ -46,6 +46,7 @@ const PersonaEspecificoComponent = () => {
               key={unidad.identificador}
               unidad={unidad}
               codigoEdificio={unidad.codigoEdificio}
+              habitante ={false}
             />
           ))
         ) : (
@@ -59,6 +60,7 @@ const PersonaEspecificoComponent = () => {
               key={unidad.identificador}
               unidad={unidad}
               codigoEdificio={unidad.codigoEdificio}
+              habitante ={false}
             />
           ))
         ) : (
@@ -72,6 +74,7 @@ const PersonaEspecificoComponent = () => {
               key={unidad.identificador}
               unidad={unidad}
               codigoEdificio={unidad.codigoEdificio}
+              habitante ={true}
             />
           ))
         ) : (
